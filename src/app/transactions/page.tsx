@@ -44,7 +44,7 @@ export default function TransactionsPage() {
   const [totalGave, setTotalGave] = useState(0);
   const [totalReceived, setTotalReceived] = useState(0);
   const [upiId, setUpiId] = useState('');
-  const [filterType, setFilterType] = useState<'' | 'gave' | 'received'>('');
+  const [filterType, setFilterType] = useState('');
   const router = useRouter();
 
   useEffect(() => {
