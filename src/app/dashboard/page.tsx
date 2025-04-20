@@ -123,6 +123,10 @@ export default function DashboardPage() {
           <Icons.user className="mr-2"/>
           Profile
         </Button>
+         <Button variant="ghost" onClick={() => router.push('/transactions')}>
+          <Icons.share className="mr-2"/>
+          Udhar
+        </Button>
       </div>
     </div>
   );
