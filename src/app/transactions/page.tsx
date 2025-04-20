@@ -121,6 +121,13 @@ export default function TransactionsPage() {
     return upiLink;
   };
 
+  const handlePayWithUpi = (transaction: PersonTransaction) => {
+    const upiLink = generateUpiLink(transaction);
+    if (upiLink) {
+      window.open(upiLink, '_blank');
+    }
+  };
+
   const progress = (totalGave / totalReceived) * 100;
   const transactionBalance = calculateBalance();
 
@@ -228,15 +235,9 @@ export default function TransactionsPage() {
               <div>Amount: ₹{transaction.amount}</div>
               <div>Notes: {transaction.notes}</div>
               {transaction.type === 'gave' && (
-                <>
-                  {generateUpiLink(transaction) && (
-                    <Button asChild>
-                      <a href={generateUpiLink(transaction)} target="_blank" rel="noopener noreferrer">
-                        Pay with UPI
-                      </a>
-                    </Button>
-                  )}
-                </>
+                <Button onClick={() => handlePayWithUpi(transaction)}>
+                  Pay with UPI
+                </Button>
               )}
             </div>
           ))}
