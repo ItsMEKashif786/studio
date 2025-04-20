@@ -38,13 +38,13 @@ export default function TransactionsPage() {
   const [name, setName] = useState('');
   const [userData, setUserData] = useState<UserData | null>(null);
   const [personName, setPersonName] = useState('');
-  const [type, setType] = useState<'gave' | 'received'>('gave');
+  const [type, setType: React.Dispatch<React.SetStateAction<'gave' | 'received'>>] = useState<'gave' | 'received'>('gave');
   const [amount, setAmount] = useState<number>(0);
   const [notes, setNotes] = useState('');
   const [totalGave, setTotalGave] = useState(0);
   const [totalReceived, setTotalReceived] = useState(0);
   const [upiId, setUpiId] = useState('');
-  const [filterType, setFilterType] = useState('');
+  const [filterType, setFilterType] = useState<'all' | 'gave' | 'received'>('all');
   const router = useRouter();
 
   useEffect(() => {
@@ -136,9 +136,9 @@ export default function TransactionsPage() {
   const progress = (totalGave / totalReceived) * 100;
   const transactionBalance = calculateBalance();
 
-  const filteredTransactions = filterType
-    ? personTransactions.filter(transaction => transaction.type === filterType)
-    : personTransactions;
+  const filteredTransactions = filterType === 'all'
+    ? personTransactions
+    : personTransactions.filter(transaction => transaction.type === filterType);
 
   return (
     <div className="container mx-auto p-4">
@@ -239,35 +239,39 @@ export default function TransactionsPage() {
           <CardTitle>Transactions</CardTitle>
         </CardHeader>
         <CardContent>
-          <Select onValueChange={value => setFilterType(value as '' | 'gave' | 'received')}>
+          <Select onValueChange={value => setFilterType(value as 'all' | 'gave' | 'received')}>
             <SelectTrigger>
               <SelectValue placeholder="Filter by Type"/>
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All</SelectItem>
+              <SelectItem value="all">All</SelectItem>
               <SelectItem value="gave">Gave</SelectItem>
               <SelectItem value="received">Received</SelectItem>
             </SelectContent>
           </Select>
-          {filteredTransactions.map((transaction) => (
-            <div key={transaction.id}>
-              <div>
-                Person Name: {transaction.personName}
+          {filteredTransactions.length === 0 ? (
+            <div>No transactions to display</div>
+          ) : (
+            filteredTransactions.map((transaction) => (
+              <div key={transaction.id}>
+                <div>
+                  Person Name: {transaction.personName}
+                </div>
+                <div>
+                  Type: {transaction.type}
+                </div>
+                <div>
+                  Amount: ₹{transaction.amount}
+                </div>
+                <div>
+                  Notes: {transaction.notes}
+                </div>
+                {transaction.type === 'gave' && (
+                  <Button variant="secondary" onClick={() => handlePayWithUpi(transaction)}>Pay with UPI</Button>
+                )}
               </div>
-              <div>
-                Type: {transaction.type}
-              </div>
-              <div>
-                Amount: ₹{transaction.amount}
-              </div>
-              <div>
-                Notes: {transaction.notes}
-              </div>
-              {transaction.type === 'gave' && (
-                <Button variant="secondary" onClick={() => handlePayWithUpi(transaction)}>Pay with UPI</Button>
-              )}
-            </div>
-          ))}
+            ))
+          )}
         </CardContent>
       </Card>
        {/* Bottom navigation bar */}
