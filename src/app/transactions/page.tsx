@@ -1,6 +1,6 @@
 'use client';
 
-import {useEffect, useState} from 'react';
+import {useEffect, useState, useCallback} from 'react';
 import {useRouter} from 'next/navigation';
 import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
 import {Button} from '@/components/ui/button';
@@ -13,6 +13,7 @@ import {Progress} from '@/components/ui/progress';
 import {Icons} from '@/components/icons';
 import {cn} from '@/lib/utils';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
+import React from 'react';
 
 type PersonTransaction = {
   id: string;
@@ -109,7 +110,7 @@ export default function TransactionsPage() {
     return totalReceived - totalGave;
   };
 
-  const generateUpiLink = (transaction: PersonTransaction) => {
+  const generateUpiLink = useCallback((transaction: PersonTransaction) => {
     if (!userData?.upiId) {
       toast({
         title: "Error",
@@ -121,7 +122,7 @@ export default function TransactionsPage() {
     }
     const upiLink = `upi://pay?pa=${userData?.upiId}&am=${transaction.amount}&tn=${transaction.notes}`;
     return upiLink;
-  };
+  }, [userData?.upiId, router]);
 
   const handlePayWithUpi = (transaction: PersonTransaction) => {
     const upiLink = generateUpiLink(transaction);
@@ -134,117 +135,119 @@ export default function TransactionsPage() {
   const transactionBalance = calculateBalance();
 
   return (
-    <div className="container mx-auto p-4">
-      <Toaster/>
-      <Card>
-        <CardHeader>
-          <CardTitle>Person-to-Person Transactions</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4">
-            <div className="mb-4">
-              <Label htmlFor="personName">Person Name</Label>
-              <Input
-                type="text"
-                id="personName"
-                placeholder="Enter person name"
-                value={personName}
-                onChange={(e) => setPersonName(e.target.value)}
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="type">Type</Label>
-              <Select
-                id="type"
-                value={type}
-                onValueChange={(value) => setType(value as 'gave' | 'received')}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a type"/>
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="gave">Gave</SelectItem>
-                  <SelectItem value="received">Received</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="mb-4">
-              <Label htmlFor="amount">Amount (₹)</Label>
-              <Input
-                type="number"
-                id="amount"
-                placeholder="Enter amount"
-                value={amount.toString()}
-                onChange={(e) => setAmount(parseFloat(e.target.value))}
-              />
-            </div>
-            <div className="mb-4">
-              <Label htmlFor="notes">Notes</Label>
-              <Textarea
-                id="notes"
-                placeholder="Enter notes"
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-              />
-            </div>
-            <Button onClick={addTransaction}>Add Transaction</Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="mt-4">
-        <CardHeader>
-          <CardTitle>Transaction Summary</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="mb-2">
-            Total Amount You Gave: ₹{totalGave.toFixed(2)}
-          </div>
-          <div className="mb-2">
-            Total Amount You Received: ₹{totalReceived.toFixed(2)}
-          </div>
-          <div>
-            Balance: ₹{transactionBalance.toFixed(2)}
-          </div>
-        </CardContent>
-      </Card>
-
-      {totalReceived > 0 && (
-        <Card className="mt-4">
+    <React.Fragment>
+      <div className="container mx-auto p-4">
+        <Toaster/>
+        <Card>
           <CardHeader>
-            <CardTitle>Progress</CardTitle>
+            <CardTitle>Person-to-Person Transactions</CardTitle>
           </CardHeader>
           <CardContent>
-            <Progress value={progress}/>
-            <p className="text-sm mt-2">
-              {progress.toFixed(2)}% of amount due has been received.
-            </p>
+            <div className="grid gap-4">
+              <div className="mb-4">
+                <Label htmlFor="personName">Person Name</Label>
+                <Input
+                  type="text"
+                  id="personName"
+                  placeholder="Enter person name"
+                  value={personName}
+                  onChange={(e) => setPersonName(e.target.value)}
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="type">Type</Label>
+                <Select
+                  id="type"
+                  value={type}
+                  onValueChange={(value) => setType(value as 'gave' | 'received')}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a type"/>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="gave">Gave</SelectItem>
+                    <SelectItem value="received">Received</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="mb-4">
+                <Label htmlFor="amount">Amount (₹)</Label>
+                <Input
+                  type="number"
+                  id="amount"
+                  placeholder="Enter amount"
+                  value={amount.toString()}
+                  onChange={(e) => setAmount(parseFloat(e.target.value))}
+                />
+              </div>
+              <div className="mb-4">
+                <Label htmlFor="notes">Notes</Label>
+                <Textarea
+                  id="notes"
+                  placeholder="Enter notes"
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                />
+              </div>
+              <Button onClick={addTransaction}>Add Transaction</Button>
+            </div>
           </CardContent>
         </Card>
-      </Card>
 
-      <Card className="mt-4">
-        <CardHeader>
-          <CardTitle>Transactions</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {personTransactions.map((transaction) => (
-            <div key={transaction.id} className="mb-2 p-2 border rounded-md">
-              <div>Person Name: {transaction.personName}</div>
-              <div>Type: {transaction.type}</div>
-              <div>Amount: ₹{transaction.amount}</div>
-              <div>Notes: {transaction.notes}</div>
-              {transaction.type === 'gave' && (
-                <Button onClick={() => handlePayWithUpi(transaction)}>
-                  Pay with UPI
-                </Button>
-              )}
+        <Card className="mt-4">
+          <CardHeader>
+            <CardTitle>Transaction Summary</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="mb-2">
+              Total Amount You Gave: ₹{totalGave.toFixed(2)}
             </div>
-          ))}
-        </CardContent>
-      </Card>
+            <div className="mb-2">
+              Total Amount You Received: ₹{totalReceived.toFixed(2)}
+            </div>
+            <div>
+              Balance: ₹{transactionBalance.toFixed(2)}
+            </div>
+          </CardContent>
+        </Card>
+
+        {totalReceived > 0 && (
+          <Card className="mt-4">
+            <CardHeader>
+              <CardTitle>Progress</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Progress value={progress}/>
+              <p className="text-sm mt-2">
+                {progress.toFixed(2)}% of amount due has been received.
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
+        <Card className="mt-4">
+          <CardHeader>
+            <CardTitle>Transactions</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {personTransactions.map((transaction) => (
+              <div key={transaction.id} className="mb-2 p-2 border rounded-md">
+                <div>Person Name: {transaction.personName}</div>
+                <div>Type: {transaction.type}</div>
+                <div>Amount: ₹{transaction.amount}</div>
+                <div>Notes: {transaction.notes}</div>
+                {transaction.type === 'gave' && (
+                  <Button onClick={() => handlePayWithUpi(transaction)}>
+                    Pay with UPI
+                  </Button>
+                )}
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      </div>
 
       {/* Bottom navigation bar */}
       <div className="fixed bottom-0 left-0 w-full bg-secondary border-t border-border p-4 flex justify-around">
@@ -257,7 +260,6 @@ export default function TransactionsPage() {
           Profile
         </Button>
       </div>
-    </div>
+    </React.Fragment>
   );
 }
-
