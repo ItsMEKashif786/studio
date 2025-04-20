@@ -56,7 +56,7 @@ export default function TransactionsPage() {
       setName(parsedUserData.name);
       setUpiId(parsedUserData.upiId || '');
     }
-  }, [personTransactions]);
+  }, []);
 
   useEffect(() => {
     localStorage.setItem('personTransactions', JSON.stringify(personTransactions));
@@ -223,7 +223,7 @@ export default function TransactionsPage() {
             </p>
           </CardContent>
         </Card>
-      )}
+      </Card>
 
       <Card className="mt-4">
         <CardHeader>
@@ -260,3 +260,4 @@ export default function TransactionsPage() {
     </div>
   );
 }
+

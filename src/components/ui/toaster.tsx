@@ -9,14 +9,19 @@ import {
   ToastTitle,
   ToastViewport,
 } from "@/components/ui/toast"
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export function Toaster() {
   const { toasts } = useToast()
   const [renderedToasts, setRenderedToasts] = useState([...toasts]);
+  const previousToastsRef = useRef<typeof toasts>(toasts);
 
   useEffect(() => {
-    setRenderedToasts([...toasts]);
+    // Check if the toasts array identity has changed
+    if (previousToastsRef.current !== toasts) {
+      setRenderedToasts([...toasts]);
+      previousToastsRef.current = toasts;
+    }
   }, [toasts]);
 
 
