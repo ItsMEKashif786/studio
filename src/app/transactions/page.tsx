@@ -38,7 +38,7 @@ export default function TransactionsPage() {
   const [name, setName] = useState('');
   const [userData, setUserData] = useState<UserData | null>(null);
   const [personName, setPersonName] = useState('');
-  const [type, setType: React.Dispatch<React.SetStateAction<'gave' | 'received'>>] = useState<'gave' | 'received'>('gave');
+  const [type, setType] = useState<'gave' | 'received'>('gave');
   const [amount, setAmount] = useState<number>(0);
   const [notes, setNotes] = useState('');
   const [totalGave, setTotalGave] = useState(0);
@@ -159,7 +159,6 @@ export default function TransactionsPage() {
                 onChange={(e) => setPersonName(e.target.value)}
               />
             </div>
-
             <div>
               <Label htmlFor="type">Type</Label>
               <Select
@@ -176,7 +175,6 @@ export default function TransactionsPage() {
                 </SelectContent>
               </Select>
             </div>
-
             <div>
               <Label htmlFor="amount">Amount (₹)</Label>
               <Input
@@ -206,16 +204,14 @@ export default function TransactionsPage() {
           <CardTitle>Transaction Summary</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4">
-            <div>
-              Total Amount You Gave: ₹{totalGave.toFixed(2)}
-            </div>
-            <div>
-              Total Amount You Received: ₹{totalReceived.toFixed(2)}
-            </div>
-            <div>
-              Balance: ₹{transactionBalance.toFixed(2)}
-            </div>
+          <div>
+            Total Amount You Gave: ₹{totalGave.toFixed(2)}
+          </div>
+          <div>
+            Total Amount You Received: ₹{totalReceived.toFixed(2)}
+          </div>
+          <div>
+            Balance: ₹{transactionBalance.toFixed(2)}
           </div>
         </CardContent>
       </Card>
@@ -250,7 +246,9 @@ export default function TransactionsPage() {
             </SelectContent>
           </Select>
           {filteredTransactions.length === 0 ? (
-            <div>No transactions to display</div>
+            <div>
+              No transactions to display
+            </div>
           ) : (
             filteredTransactions.map((transaction) => (
               <div key={transaction.id}>
@@ -275,7 +273,7 @@ export default function TransactionsPage() {
         </CardContent>
       </Card>
        {/* Bottom navigation bar */}
-       <div className="fixed bottom-0 left-0 w-full bg-secondary border-t border-border p-4 flex justify-around z-50">
+       <div className="fixed bottom-0 left-0 w-full bg-secondary border-t border-border p-4 flex justify-around">
         <Button variant="ghost" onClick={() => router.push('/dashboard')}>
           <Icons.home className="mr-2"/>
           Dashboard
