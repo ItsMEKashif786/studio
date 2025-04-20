@@ -109,6 +109,9 @@ export default function DashboardPage() {
       <CategorySpend transactions={transactions}/>
       <AddTransaction transactions={transactions} updateTransactions={updateTransactions}/>
       <TransactionHistory transactions={transactions} updateTransactions={updateTransactions}/>
+       <Button variant="secondary" onClick={() => router.push('/transactions')}>
+          Transactions
+        </Button>
 
       {/* Bottom navigation bar */}
       <div className="fixed bottom-0 left-0 w-full bg-secondary border-t border-border p-4 flex justify-around">

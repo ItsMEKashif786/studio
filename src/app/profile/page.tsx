@@ -14,6 +14,7 @@ type UserData = {
   name: string;
   monthlyBudget: number;
   school: string;
+  upiId?: string;
 };
 
 export default function ProfilePage() {
@@ -22,6 +23,7 @@ export default function ProfilePage() {
   const [name, setName] = useState('');
   const [monthlyBudget, setMonthlyBudget] = useState<number>(0);
   const [school, setSchool] = useState('');
+  const [upiId, setUpiId] = useState('');
 
   useEffect(() => {
     const storedUserData = localStorage.getItem('userData');
@@ -31,6 +33,7 @@ export default function ProfilePage() {
       setName(parsedUserData.name);
       setMonthlyBudget(parsedUserData.monthlyBudget);
       setSchool(parsedUserData.school);
+      setUpiId(parsedUserData.upiId || '');
     } else {
       router.push('/onboarding');
     }
@@ -50,6 +53,7 @@ export default function ProfilePage() {
       name: name,
       monthlyBudget: parseFloat(monthlyBudget.toString()),
       school: school,
+      upiId: upiId,
     };
 
     localStorage.setItem('userData', JSON.stringify(updatedUserData));
@@ -101,6 +105,16 @@ export default function ProfilePage() {
                 placeholder="Enter your school/college name"
                 value={school}
                 onChange={(e) => setSchool(e.target.value)}
+              />
+            </div>
+            <div>
+              <Label htmlFor="upiId">UPI ID</Label>
+              <Input
+                type="text"
+                id="upiId"
+                placeholder="Enter your UPI ID"
+                value={upiId}
+                onChange={(e) => setUpiId(e.target.value)}
               />
             </div>
             <Button onClick={handleSubmit}>Update Profile</Button>
