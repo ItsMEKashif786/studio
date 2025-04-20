@@ -11,7 +11,6 @@ import {toast} from '@/hooks/use-toast';
 import {Toaster} from '@/components/ui/toaster';
 import {Progress} from '@/components/ui/progress';
 import {Icons} from '@/components/icons';
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
 import React from 'react';
 import {cn} from '@/lib/utils';
 
@@ -44,7 +43,6 @@ export default function TransactionsPage() {
   const [totalGave, setTotalGave] = useState(0);
   const [totalReceived, setTotalReceived] = useState(0);
   const [upiId, setUpiId] = useState('');
-  const [filterType, setFilterType] = useState<'all' | 'gave' | 'received'>('all');
   const router = useRouter();
 
   useEffect(() => {
@@ -136,10 +134,6 @@ export default function TransactionsPage() {
   const progress = (totalGave / totalReceived) * 100;
   const transactionBalance = calculateBalance();
 
-  const filteredTransactions = filterType === 'all'
-    ? personTransactions
-    : personTransactions.filter(transaction => transaction.type === filterType);
-
   return (
     <div className="container mx-auto p-4">
       <Toaster/>
@@ -161,19 +155,15 @@ export default function TransactionsPage() {
             </div>
             <div>
               <Label htmlFor="type">Type</Label>
-              <Select
+              <select
                 id="type"
                 value={type}
-                onValueChange={(value) => setType(value as 'gave' | 'received'))}
+                onChange={(e) => setType(e.target.value as 'gave' | 'received')}
+                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                <SelectTrigger>
-                  <SelectValue>{type === 'gave' ? 'Gave' : 'Received'}</SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="gave">Gave</SelectItem>
-                  <SelectItem value="received">Received</SelectItem>
-                </SelectContent>
-              </Select>
+                <option value="gave">Gave</option>
+                <option value="received">Received</option>
+              </select>
             </div>
             <div>
               <Label htmlFor="amount">Amount (₹)</Label>
@@ -235,22 +225,12 @@ export default function TransactionsPage() {
           <CardTitle>Transactions</CardTitle>
         </CardHeader>
         <CardContent>
-          <Select onValueChange={value => setFilterType(value as 'all' | 'gave' | 'received')}>
-            <SelectTrigger>
-              <SelectValue placeholder="Filter by Type"/>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All</SelectItem>
-              <SelectItem value="gave">Gave</SelectItem>
-              <SelectItem value="received">Received</SelectItem>
-            </SelectContent>
-          </Select>
-          {filteredTransactions.length === 0 ? (
+          {personTransactions.length === 0 ? (
             <div>
               No transactions to display
             </div>
           ) : (
-            filteredTransactions.map((transaction) => (
+            personTransactions.map((transaction) => (
               <div key={transaction.id}>
                 <div>
                   Person Name: {transaction.personName}
@@ -290,4 +270,3 @@ export default function TransactionsPage() {
     </div>
   );
 }
-
