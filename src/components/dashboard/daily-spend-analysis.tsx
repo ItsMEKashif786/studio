@@ -28,7 +28,7 @@ const DailySpendAnalysis: React.FC<DailySpendAnalysisProps> = ({transactions}) =
         <CardTitle>Daily Spend Analysis</CardTitle>
       </CardHeader>
       <CardContent>
-        <p>Today's Spend: ${dailySpend.toFixed(2)}</p>
+        <p>Today's Spend: ₹{dailySpend.toFixed(2)}</p>
       </CardContent>
     </Card>
   );

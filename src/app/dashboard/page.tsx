@@ -12,6 +12,7 @@ import CategorySpend from '@/components/dashboard/category-spend';
 import AddTransaction from '@/components/dashboard/add-transaction';
 import TransactionHistory from '@/components/dashboard/transaction-history';
 import {Icons} from '@/components/icons';
+import {cn} from '@/lib/utils';
 
 // Define types for user data and transactions
 type UserData = {
@@ -91,11 +92,17 @@ export default function DashboardPage() {
     <div className="container mx-auto p-4">
       <Toaster/>
       <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-semibold">
+        <h1 className={cn("text-2xl font-semibold transition-colors", isDarkMode ? "text-white" : "text-gray-800")}>
           Dashboard
         </h1>
         <Switch checked={isDarkMode} onCheckedChange={toggleDarkMode}/>
       </div>
+      {/* Display Student's Name */}
+      {userData && (
+        <div className={cn("mb-4 text-xl font-semibold transition-colors", isDarkMode ? "text-gray-300" : "text-gray-700")}>
+          Welcome, {userData.name}!
+        </div>
+      )}
 
       <BudgetStatus currentBalance={currentBalance} monthlyBudget={userData.monthlyBudget} totalSpend={totalSpend} totalCredit={totalCredit}/>
       <DailySpendAnalysis transactions={transactions}/>

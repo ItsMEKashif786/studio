@@ -22,7 +22,7 @@ const BudgetStatus: React.FC<BudgetStatusProps> = ({currentBalance, monthlyBudge
             <CardTitle>Current Balance</CardTitle>
           </CardHeader>
           <CardContent>
-            ${currentBalance.toFixed(2)}
+            ₹{currentBalance.toFixed(2)}
           </CardContent>
         </Card>
 
@@ -31,7 +31,7 @@ const BudgetStatus: React.FC<BudgetStatusProps> = ({currentBalance, monthlyBudge
             <CardTitle>Total Spend</CardTitle>
           </CardHeader>
           <CardContent>
-            ${totalSpend.toFixed(2)}
+            ₹{totalSpend.toFixed(2)}
           </CardContent>
         </Card>
 
@@ -40,7 +40,7 @@ const BudgetStatus: React.FC<BudgetStatusProps> = ({currentBalance, monthlyBudge
             <CardTitle>Total Credit</CardTitle>
           </CardHeader>
           <CardContent>
-            ${totalCredit.toFixed(2)}
+            ₹{totalCredit.toFixed(2)}
           </CardContent>
         </Card>
       </div>

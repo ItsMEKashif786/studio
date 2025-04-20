@@ -55,7 +55,7 @@ const TransactionHistory: React.FC<TransactionHistoryProps> = ({transactions, up
               {transactions.map((transaction) => (
                 <li key={transaction.id} className="flex items-center justify-between py-2 border-b">
                   <div>
-                    {transaction.type === 'spend' ? '-' : '+'} ${transaction.amount.toFixed(2)} ({transaction.category}) - {new Date(transaction.date).toLocaleDateString()}
+                    {transaction.type === 'spend' ? '-' : '+'} ₹{transaction.amount.toFixed(2)} ({transaction.category}) - {new Date(transaction.date).toLocaleDateString()}
                   </div>
                   <Button variant="outline" size="sm" onClick={() => deleteTransaction(transaction.id)}>Delete</Button>
                 </li>
