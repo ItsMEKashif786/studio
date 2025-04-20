@@ -44,6 +44,7 @@ export default function TransactionsPage() {
   const [totalGave, setTotalGave] = useState(0);
   const [totalReceived, setTotalReceived] = useState(0);
   const [upiId, setUpiId] = useState('');
+  const [filterType, setFilterType] = useState<'' | 'gave' | 'received'>('');
   const router = useRouter();
 
   useEffect(() => {
@@ -134,6 +135,10 @@ export default function TransactionsPage() {
 
   const progress = (totalGave / totalReceived) * 100;
   const transactionBalance = calculateBalance();
+
+  const filteredTransactions = filterType
+    ? personTransactions.filter(transaction => transaction.type === filterType)
+    : personTransactions;
 
   return (
     <div className="container mx-auto p-4">
@@ -234,7 +239,17 @@ export default function TransactionsPage() {
           <CardTitle>Transactions</CardTitle>
         </CardHeader>
         <CardContent>
-          {personTransactions.map((transaction) => (
+          <Select onValueChange={value => setFilterType(value as '' | 'gave' | 'received')}>
+            <SelectTrigger>
+              <SelectValue placeholder="Filter by Type"/>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">All</SelectItem>
+              <SelectItem value="gave">Gave</SelectItem>
+              <SelectItem value="received">Received</SelectItem>
+            </SelectContent>
+          </Select>
+          {filteredTransactions.map((transaction) => (
             <div key={transaction.id}>
               <div>
                 Person Name: {transaction.personName}
