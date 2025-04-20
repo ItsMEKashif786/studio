@@ -59,10 +59,9 @@ export default function TransactionsPage() {
       setName(parsedUserData.name);
       setUpiId(parsedUserData.upiId || '');
     }
-  }, [/* Removed unnecessary dependencies */]);
+  }, []);
 
   useEffect(() => {
-    localStorage.setItem(PERSON_TRANSACTIONS_STORAGE_KEY, JSON.stringify(personTransactions));
     const gave = personTransactions.reduce((sum, transaction) => {
       return transaction.type === 'gave' ? sum + transaction.amount : sum;
     }, 0);
