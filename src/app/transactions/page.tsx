@@ -91,7 +91,9 @@ export default function TransactionsPage() {
       upiId: upiId,
     };
 
-    setPersonTransactions([...personTransactions, newTransaction]);
+    const updatedTransactions = [...personTransactions, newTransaction];
+    setPersonTransactions(updatedTransactions); // Update state
+    localStorage.setItem('personTransactions', JSON.stringify(updatedTransactions)); // Persist to local storage
     setPersonName('');
     setType('gave');
     setAmount(0);
