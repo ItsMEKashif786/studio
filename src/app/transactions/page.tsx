@@ -38,7 +38,7 @@ export default function TransactionsPage() {
   const [name, setName] = useState('');
   const [userData, setUserData] = useState<UserData | null>(null);
   const [personName, setPersonName] = useState('');
-  const [type, setType: React.Dispatch<React.SetStateAction<'gave' | 'received'>>] = useState<'gave' | 'received'>('gave');
+  const [type, setType] = useState<'gave' | 'received'>('gave');
   const [amount, setAmount] = useState<number>(0);
   const [notes, setNotes] = useState('');
   const [totalGave, setTotalGave] = useState(0);
@@ -165,7 +165,7 @@ export default function TransactionsPage() {
               <Select
                 id="type"
                 value={type}
-                onValueChange={(value) => setType(value as 'gave' | 'received')}
+                onValueChange={(value) => setType(value as 'gave' | 'received'))}
               >
                 <SelectTrigger>
                   <SelectValue>{type === 'gave' ? 'Gave' : 'Received'}</SelectValue>
