@@ -59,7 +59,7 @@ export default function TransactionsPage() {
       setName(parsedUserData.name);
       setUpiId(parsedUserData.upiId || '');
     }
-  }, []);
+  }, [/* Removed unnecessary dependencies */]);
 
   useEffect(() => {
     localStorage.setItem(PERSON_TRANSACTIONS_STORAGE_KEY, JSON.stringify(personTransactions));
@@ -274,4 +274,3 @@ export default function TransactionsPage() {
     </div>
   );
 }
-
