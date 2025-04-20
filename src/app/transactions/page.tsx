@@ -11,9 +11,9 @@ import {toast} from '@/hooks/use-toast';
 import {Toaster} from '@/components/ui/toaster';
 import {Progress} from '@/components/ui/progress';
 import {Icons} from '@/components/icons';
-import {cn} from '@/lib/utils';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
 import React from 'react';
+import {cn} from '@/lib/utils';
 
 type PersonTransaction = {
   id: string;
@@ -256,6 +256,22 @@ export default function TransactionsPage() {
           ))}
         </CardContent>
       </Card>
+       {/* Bottom navigation bar */}
+       <div className="fixed bottom-0 left-0 w-full bg-secondary border-t border-border p-4 flex justify-around z-50">
+        <Button variant="ghost" onClick={() => router.push('/dashboard')}>
+          <Icons.home className="mr-2"/>
+          Dashboard
+        </Button>
+        <Button variant="ghost" onClick={() => router.push('/profile')}>
+          <Icons.user className="mr-2"/>
+          Profile
+        </Button>
+         <Button variant="ghost" onClick={() => router.push('/transactions')}>
+          <Icons.share className="mr-2"/>
+          Udhar
+        </Button>
+      </div>
     </div>
   );
 }
+
