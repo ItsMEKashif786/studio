@@ -9,13 +9,20 @@ import {
   ToastTitle,
   ToastViewport,
 } from "@/components/ui/toast"
+import { useEffect, useState } from "react";
 
 export function Toaster() {
   const { toasts } = useToast()
+  const [renderedToasts, setRenderedToasts] = useState([...toasts]);
+
+  useEffect(() => {
+    setRenderedToasts([...toasts]);
+  }, [toasts]);
+
 
   return (
     <ToastProvider>
-      {toasts.map(function ({ id, title, description, action, ...props }) {
+      {renderedToasts.map(function ({ id, title, description, action, ...props }) {
         return (
           <Toast key={id} {...props}>
             <div className="grid gap-1">
@@ -33,3 +40,4 @@ export function Toaster() {
     </ToastProvider>
   )
 }
+
